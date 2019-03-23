@@ -35,7 +35,10 @@ def _calculate_raw_schedule(equipment: Dict, orders: Dict, products: Dict,
     """
     possible_equipments_for_product = _get_possible_equipments_for_product(equipment, products)
 
-    # TODO: if deadline is on weekend, move deadline to Friday
+    # if deadline is on weekend, move deadline to Friday cos' no equipment works on weekend
+    for order in orders.values():
+        if _is_weekend(order['deadline']):
+            order['deadline'] = order['deadline'] - td(days=order['deadline'].weekday() - 4)
     sorted_orders = sorted(list(orders.items()), key=lambda x: (x[1]['deadline'], x[1]['amount']))
 
     # TODO: Range equipments not by left_items, but by expecting awaiting futures

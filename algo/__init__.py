@@ -35,13 +35,17 @@ def _calculate_raw_schedule(equipment: Dict, orders: Dict, products: Dict,
     """
     possible_equipments_for_product = _get_possible_equipments_for_product(equipment, products)
 
+    # TODO: if deadline is on weekend, move deadline to Friday
     sorted_orders = sorted(list(orders.items()), key=lambda x: (x[1]['deadline'], x[1]['amount']))
 
-    schedule = {eq_id: {"left_items": 0, "actions": []} for eq_id in equipment}
+    # TODO: Range equipments not by left_items, but by expecting awaiting futures
+    schedule = {eq_id: {"left_items": 0, "actions": []}
+                for eq_id in equipment}
     prev_date = dt.strptime("2019-03-17", "%Y-%m-%d")
     n_placed = 0
     n_failed = 0
 
+    # TODO: take into account if order have fixed start time
     for idx, row in tqdm(sorted_orders, disable=not verbose):
         current_date = row['deadline']
         if prev_date != current_date:
@@ -50,6 +54,7 @@ def _calculate_raw_schedule(equipment: Dict, orders: Dict, products: Dict,
             if not _is_weekend(current_date):
                 new_hours = _diff_dates(current_date, prev_date) * 24
                 for eq_id, v in schedule.items():
+                    # TODO: take into account if maintenance is planned for equipment
                     v['left_items'] += new_hours * equipment[eq_id]['speed']
             prev_date = current_date
 

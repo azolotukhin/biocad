@@ -18,7 +18,7 @@ class Command(BaseCommand):
             next(rows, None)
             for row in rows:
                 product_id = row[0]
-                equipment_classes = [v.strip()[1:-1].replace('\\xa0', ' ') for v in row[1][1:-1].split(',')]
+                equipment_classes = [v.strip()[1:-1] for v in row[1][1:-1].split(',')]
                 product_equipment_classes = []
                 for equipment_class_name in equipment_classes:
                     equipment_class = EquipmentClass.objects.filter(name=equipment_class_name)

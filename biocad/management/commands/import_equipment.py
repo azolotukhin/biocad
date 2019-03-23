@@ -18,7 +18,7 @@ class Command(BaseCommand):
             next(rows, None)
             for row in rows:
                 equipment_id = row[0]
-                equipment_class_name = row[1]
+                equipment_class_name = row[1].replace('\\xa0', ' ')
                 speed_per_hour = row[3]
                 equipment_class = EquipmentClass.objects.filter(name=equipment_class_name)
                 if not equipment_class:

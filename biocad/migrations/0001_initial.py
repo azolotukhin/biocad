@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=256, verbose_name='Класс оборудования')),
             ],
             options={
-                'verbose_name': 'Класс оборуования',
+                'verbose_name': 'Класс оборудования',
                 'verbose_name_plural': 'Классы оборудования',
                 'ordering': ('name',),
             },

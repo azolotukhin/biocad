@@ -24,6 +24,16 @@ def index(request):
                    for order in orders}
     schedule = get_schedule(equipment_dict, orders_dict, products_dict)
     shedule_for_date = {}
+    filter_date = datetime.datetime(2019, 4, 19).date()
     for equipment_id, data in schedule['equipment_schedule'].items():
-        shedule_for_date[equipment_id] = [d for d in data if d['start'].date() == datetime.datetime.utcnow().date()]
+        shedule_for_date[equipment_id] = []
+        for d in data:
+            if d['start'].date() == filter_date:
+                if d['end'].date() > filter_date:
+                    d['end'] = datetime.datetime.combine(filter_date, datetime.datetime.max.time())
+                shedule_for_date[equipment_id].append(d)
+            elif d['end'].date() == filter_date:
+                d['start'] = datetime.datetime.combine(filter_date, datetime.datetime.min.time())
+                shedule_for_date[equipment_id].append(d)
+        # shedule_for_date[equipment_id] = [d for d in data if d['start'].date() == datetime.datetime.utcnow().date()]
     return render(request, 'index.html', {'schedule': shedule_for_date})

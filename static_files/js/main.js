@@ -2,9 +2,29 @@
         $(document).ready(function() {
             var data = [];
 
-            data.push({"start": "3/23/2015 5:27:00", "end": "3/23/2015 1:27:00", "task":"cc12f9d4-26f1-11e5-80c0-00505692e771"});
+            data.push({"start": "3/23/2019 12:00:00",
+                                "end": "3/23/2019 5:27:00",
+                                "task":"cc12f9d4-26f1-11e5-80c0-00505692e771",
+                                "order_id": 59995 ,
+                                "amount":340 });
 
-            data.push({"start": "3/23/2015 1:27:00", "end": "3/23/2015 10:43:00", "task":"cc12f9d4-26f1-11e5-80c0-00505692e771"});
+                    data.push({"start": "3/23/2019 5:27:00",
+                                "end": "3/23/2019 1:27:00",
+                                "task":"cc12f9d4-26f1-11e5-80c0-00505692e771",
+                                "order_id": 88577 ,
+                                "amount":440 });
+
+                    data.push({"start": "3/23/2019 1:27:00",
+                                "end": "3/23/2019 10:43:00",
+                                "task":"cc12f9d4-26f1-11e5-80c0-00505692e771",
+                                "order_id": 50475 ,
+                                "amount":510 });
+
+                    data.push({"start": "3/23/2019 10:43:00",
+                                "end": "3/23/2019 11:59:00",
+                                "task":"cc12f9d4-26f1-11e5-80c0-00505692e771",
+                                "order_id": 21298 ,
+                                "amount":370 });
 
             // data.push({"start": "3/23/2015 10:43:00", "end": "24/24/2015 5:27:00", "task":"cc12f9d4-26f1-11e5-80c0-00505692e771"});
 
@@ -52,33 +72,4 @@
 
             chart.renderTo("svg#example");
 
-
-
-            var tooltipAnchorSelection = plot.foreground().append("circle").attr({
-              r: 3,
-              opacity: 0
-            });
-
-            var tooltipAnchor = $(tooltipAnchorSelection.node());
-            tooltipAnchor.tooltip({
-              animation: false,
-              container: "body",
-              placement: "auto",
-              title: "text",
-              trigger: "manual"
-            });
-
-            // Setup Interaction.Pointer
-            var pointer = new Plottable.Interactions.Pointer();
-            pointer.onPointerMove(function(p) {
-              var closest = plot.entityNearest(p);
-              if (closest) {
-                tooltipAnchor.attr({
-                  cx: closest.position.x,
-                  cy: closest.position.y,
-                  "data-original-title": "Value: " + closest.datum.y
-                });
-                tooltipAnchor.tooltip("show");
-              }
-            });
         });

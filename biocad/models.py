@@ -20,6 +20,8 @@ class Equipment(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, max_length=256)
     equipment_class = models.ForeignKey(EquipmentClass, on_delete=models.CASCADE, verbose_name='Класс оборудования')
     speed_per_hour = models.IntegerField(default=0, verbose_name='Скорость')
+    start_maintenance = models.DateTimeField(verbose_name='Начало тех. работ', blank=True, null=True)
+    end_maintenance = models.DateTimeField(verbose_name='Конец тех. работ', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Оборудование'
@@ -46,6 +48,8 @@ class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     amount = models.IntegerField(default=0, verbose_name='Количество')
     deadline = models.DateTimeField(verbose_name='Дедлайн')
+    start_work_datetime = models.DateTimeField(verbose_name='Начало работы', blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE, verbose_name='Оборудование', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Заказ'

@@ -5,20 +5,52 @@ from django.db import models
 
 
 class EquipmentClass(models.Model):
-    name = models.CharField(verbose_name='Класс оборудования')
+    name = models.CharField(verbose_name='Класс оборудования', max_length=256)
+
+    class Meta:
+        verbose_name = 'Класс оборуования'
+        verbose_name_plural = 'Классы оборудования'
+        ordering = ('name', )
+
+    def __str__(self):
+        return self.name
 
 
 class Equipment(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4)
-    class_name = models.CharField(verbose_name='Класс оборудования')
+    id = models.CharField(primary_key=True, default=uuid.uuid4, max_length=256)
+    equipment_class = models.ForeignKey(EquipmentClass, on_delete=models.CASCADE, verbose_name='Класс оборудования')
     speed_per_hour = models.IntegerField(default=0, verbose_name='Скорость')
+
+    class Meta:
+        verbose_name = 'Оборудование'
+        verbose_name_plural = 'Оборудование'
+        ordering = ('equipment_class', )
+
+    def __str__(self):
+        return self.id
 
 
 class Product(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4)
+    id = models.CharField(primary_key=True, default=uuid.uuid4, max_length=256, editable=False)
+    equipment_classes = models.ManyToManyField(EquipmentClass)
+
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+
+    def __str__(self):
+        return self.id
 
 
 class Order(models.Model):
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     amount = models.IntegerField(default=0, verbose_name='Количество')
-    deadline = models.DateTimeField(auto_now_add=True, verbose_name='Дедлайн')
+    deadline = models.DateTimeField(verbose_name='Дедлайн')
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ('deadline',)
+
+    def __str__(self):
+        return '%s (%s)' % (self.id, self.deadline.strftime('%Y-%m-%d'))

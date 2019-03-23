@@ -25,6 +25,7 @@ class Command(BaseCommand):
                     if not equipment_class:
                         equipment_class = EquipmentClass(name=equipment_class_name)
                         equipment_class.save()
+                        print(equipment_class_name)
                     else:
                         equipment_class = equipment_class[0]
                     product_equipment_classes.append(equipment_class)

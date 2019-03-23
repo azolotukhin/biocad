@@ -26,7 +26,7 @@ class Command(BaseCommand):
                         print(product_id, equipment_class_name)
                     else:
                         equipment_class = equipment_class[0]
-                    product_equipment_classes.append(equipment_class)
+                        product_equipment_classes.append(equipment_class)
                 product = Product(id=product_id)
                 product.save()
                 product.equipment_classes.add(*product_equipment_classes)

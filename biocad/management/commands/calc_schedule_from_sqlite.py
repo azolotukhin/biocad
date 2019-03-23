@@ -2,6 +2,7 @@ from django.core.management import BaseCommand
 
 from biocad.models import Equipment, Order, Product
 from algo import get_schedule
+import numpy as np
 
 
 class Command(BaseCommand):
@@ -29,3 +30,7 @@ class Command(BaseCommand):
         print("start calculating schedule..")
         schedule = get_schedule(equipment_dict, orders_dict, products_dict)
         print("end calculating schedule")
+        n_successes = np.sum([order['is_placed']
+                              for order in schedule['orders_stat'].values()])
+        # print(max_order_price, n_successes)
+        print(n_successes)

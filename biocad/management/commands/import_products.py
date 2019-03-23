@@ -12,9 +12,9 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options ):
         data_dir = os.path.join(os.path.dirname(__file__), '../../../data')
-        file_path = os.path.join(os.path.normpath(data_dir), 'product.csv')
+        file_path = os.path.join(os.path.normpath(data_dir), 'product.tsv')
         with open(file_path) as csvfile:
-            rows = csv.reader(csvfile)
+            rows = csv.reader(csvfile, delimiter='\t')
             next(rows, None)
             for row in rows:
                 product_id = row[0]

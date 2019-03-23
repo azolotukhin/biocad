@@ -93,5 +93,3 @@ ENV/
 
 #custom _env
 _env
-
-db.sqlite3

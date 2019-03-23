@@ -9,16 +9,27 @@
         <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
         <link href="{% static "bootstrap/css/bootstrap-grid.min.css" %}" rel="stylesheet" type="text/css">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+
+        <link href="{% static "plottable/plottable.css" %}" rel="stylesheet" type="text/css">
+        <script src="{% static "plottable/d3.js" %}"></script>
+        <script src="{% static "plottable/plottable.js" %}"></script>
+
+
 		{% block headtag %}
 		{% endblock %}
 	</head>
 	<body>
 		{% block body %}
-            <nav class="navbar navbar-light bg-light">
+            <nav class="navbar navbar-light bg-light" style="margin-bottom: 25px">
               <a class="navbar-brand" href="#">
                 <img src="{% static "images/logo.png"%}" width="150" height="55" alt="">
               </a>
+              <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
             </nav>
 		{% endblock %}
 	</body>

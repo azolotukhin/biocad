@@ -3,12 +3,14 @@ from datetime import datetime as dt, timedelta as td
 from typing import Dict
 
 
-def _diff_dates(dt1, dt2):
-    return (dt.strptime(dt1, "%Y-%m-%d") - dt.strptime(dt2, "%Y-%m-%d")).days
+def _diff_dates(dt1: dt, dt2: dt):
+    # return (dt.strptime(dt1, "%Y-%m-%d") - dt.strptime(dt2, "%Y-%m-%d")).days
+    return (dt1 - dt2).days
 
 
-def _is_weekend(dt1):
-    return dt.strptime(dt1, "%Y-%m-%d").weekday() > 4
+def _is_weekend(dt1: dt):
+    # return dt.strptime(dt1, "%Y-%m-%d").weekday() > 4
+    return dt1.weekday() > 4
 
 
 def _get_possible_equipments_for_product(equipment: Dict, products: Dict):
@@ -37,7 +39,7 @@ def _calculate_raw_schedule(equipment: Dict, orders: Dict, products: Dict):
     sorted_orders = sorted(list(orders.items()), key=lambda x: (x[1]['deadline'], x[1]['amount']))
 
     schedule = {eq_id: {"left_items": 0, "actions": []} for eq_id in equipment}
-    prev_date = "2019-03-17"
+    prev_date = dt.strptime("2019-03-17", "%Y-%m-%d")
     n_placed = 0
     n_failed = 0
 

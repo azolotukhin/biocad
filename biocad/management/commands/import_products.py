@@ -23,9 +23,7 @@ class Command(BaseCommand):
                 for equipment_class_name in equipment_classes:
                     equipment_class = EquipmentClass.objects.filter(name=equipment_class_name)
                     if not equipment_class:
-                        equipment_class = EquipmentClass(name=equipment_class_name)
-                        equipment_class.save()
-                        print(equipment_class_name)
+                        print(product_id, equipment_class_name)
                     else:
                         equipment_class = equipment_class[0]
                     product_equipment_classes.append(equipment_class)

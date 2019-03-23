@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block body %}
+    <script>
+        $(document).ready(function() {
+            var data = [];
+            {% for equipment_id, data in schedule.items %}
+                {% for d in data %}
+                    data.push({"start": "{{ d.start|date:"n/j/Y g:i:00" }}",
+                                "end": "{{ d.end|date:"n/j/Y g:i:00" }}",
+                                "task":"{{ equipment_id }}",
+                                "order_id": {{ d.order_id}} ,
+                                "amount":{{ d.amount}} });
+                {% endfor %}
+            {% endfor %}
+
+            var colorScale = new Plottable.Scales.Color();
+            colorScale.range([].concat(... new Array(100).fill(['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD', '#8C564B', '#CFECF9', '#7F7F7F', '#BCBD22', '#17BECF'])));
+
+            var xScale = new Plottable.Scales.Time();
+            var xAxis = new Plottable.Axes.Time(xScale, "bottom");
+
+            var yScale = new Plottable.Scales.Category();
+            var yAxis = new Plottable.Axes.Category(yScale, "left");
+
+            var plot = new Plottable.Plots.Rectangle()
+                .x(function (d) {
+                    return new Date(d.start);
+                }, xScale)
+                .x2(function (d) {
+                    return new Date(d.end);
+                })
+                .y(function (d) {
+                    return d.task;
+                }, yScale)
+                .attr("fill", function (d) {
+                    return d.order_id;
+                }, colorScale)
+                .attr("class", function (d) {
+                    return 'order';
+                }).attr("data-toggle", function (d) {
+                    return 'tooltip';
+                }).attr("title", function (d) {
+                    return d.order_id + "(amount: "+ d.amount +")";
+                })
+                .addDataset(new Plottable.Dataset(data));
+
+            var chart = new Plottable.Components.Table([
+                [yAxis, plot],
+                [null, xAxis]
+            ]);
+
+            chart.renderTo("svg#example");
+            $('.order').tooltip({
+                            'container': 'body',
+                            'placement': 'bottom'
+                       });
+        });
+    </script>
+
+    {{ block.super }}
+    <div style="height: 10000px">
+        <svg id="example"></svg>
+    </div>
+{% endblock %}

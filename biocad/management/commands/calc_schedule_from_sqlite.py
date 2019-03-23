@@ -8,6 +8,7 @@ class Command(BaseCommand):
     help = 'Import equipment'
 
     def handle(self, *args, **options):
+        print('start')
         equipments = Equipment.objects.all()
 
         orders = Order.objects.all()

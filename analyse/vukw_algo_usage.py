@@ -4,6 +4,8 @@ import json
 
 from algo import get_schedule
 from utilities import read_file, fix_date_format
+from datetime import datetime as dt
+import numpy as np
 
 if __name__ == "__main__":
     equipment = read_file("../data/equipment.tsv")
@@ -26,6 +28,8 @@ if __name__ == "__main__":
     print('total speed per day for all equipments, it/day:', total_possible_speed)
     print('total awaited products: ', orders.groupby('deadline')['amount'].sum())
 
+    orders['deadline'] = orders['deadline'].apply(lambda x: dt.strptime(x, "%Y-%m-%d"))
+
     equipment_dict = (equipment[['class', 'speed_per_hour']]
                       .rename(columns={"speed_per_hour": "speed"})
                       .to_dict(orient='index'))
@@ -34,5 +38,11 @@ if __name__ == "__main__":
     orders_dict = orders.to_dict(orient='index')
 
     print("start calculating schedule..")
-    schedule = get_schedule(equipment_dict, orders_dict, products_dict)
+
+    for max_order_price in range(1000, 500, -50):
+        schedule = get_schedule(equipment_dict, orders_dict, products_dict,
+                                max_order_price=max_order_price)
+        n_successes = np.sum([order['is_placed']
+                              for order in schedule['orders_stat'].values()])
+        print(max_order_price, n_successes)
     print("end calculating schedule")

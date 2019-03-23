@@ -14,12 +14,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         data_dir = os.path.join(os.path.dirname(__file__), '../../../')
-        file_path = os.path.join(os.path.normpath(data_dir), 'data/order.csv')
+        file_path = os.path.join(os.path.normpath(data_dir), 'data/order.tsv')
         db_path = os.path.join(os.path.normpath(data_dir), 'db.sqlite3')
         Order.objects.all().delete()
         conn = sqlite3.connect(db_path)
         with open(file_path) as csvfile:
-            rows = csv.reader(csvfile)
+            rows = csv.reader(csvfile, delimiter='\t')
             next(rows, None)
             for row in rows:
                 order_id = row[0]

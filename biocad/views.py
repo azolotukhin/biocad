@@ -8,6 +8,13 @@ from biocad.models import Equipment, Order, Product
 
 
 def index(request):
+    filter_date = datetime.datetime.today().date()
+    filter_date_str = request.GET.get('date', '')
+    if filter_date_str:
+        try:
+            filter_date = datetime.datetime.strptime(filter_date_str, '%d.%m.%Y').date()
+        except:
+            pass
     equipments = Equipment.objects.all()
     orders = Order.objects.all()
     products = Product.objects.all()
@@ -24,7 +31,6 @@ def index(request):
                    for order in orders}
     schedule = get_schedule(equipment_dict, orders_dict, products_dict)
     shedule_for_date = {}
-    filter_date = datetime.datetime(2019, 4, 19).date()
     for equipment_id, data in schedule['equipment_schedule'].items():
         shedule_for_date[equipment_id] = []
         for d in data:
@@ -36,4 +42,5 @@ def index(request):
                 d['start'] = datetime.datetime.combine(filter_date, datetime.datetime.min.time())
                 shedule_for_date[equipment_id].append(d)
         # shedule_for_date[equipment_id] = [d for d in data if d['start'].date() == datetime.datetime.utcnow().date()]
-    return render(request, 'index.html', {'schedule': shedule_for_date})
+    return render(request, 'index.html', {'schedule': shedule_for_date,
+                                          'filter_date': filter_date})

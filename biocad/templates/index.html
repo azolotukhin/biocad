@@ -40,7 +40,7 @@
                 }).attr("data-toggle", function (d) {
                     return 'tooltip';
                 }).attr("title", function (d) {
-                    return d.order_id + "(amount: "+ d.amount +")";
+                    return d.order_id + " (amount: "+ d.amount +")";
                 })
                 .addDataset(new Plottable.Dataset(data));
 
@@ -58,6 +58,20 @@
     </script>
 
     {{ block.super }}
+    <div style="padding: 0 33px 30px;">
+         <form>
+          <div class="form-row align-items-center">
+            <div class="col-auto">
+              <input id="datepicker" width="190" name="date" value="{{ filter_date|date:"d.m.Y" }}"/>
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary mb-2" style="margin: 0 !important;">Show</button>
+            </div>
+          </div>
+        </form>
+    </div>
+
+
     <div style="height: 10000px">
         <svg id="example"></svg>
     </div>

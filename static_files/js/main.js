@@ -75,4 +75,15 @@
                 format: 'dd.mm.yyyy',
                 uiLibrary: 'bootstrap4'
             });
+
+            $( "#search" ).keyup(function() {
+                var order_id = $(this).val();
+                if (order_id) {
+                    $( "#search-form" ).attr("action", "/order/"+order_id)
+                } else {
+                    $( "#search-form" ).attr("action", "/")
+                }
+
+            });
+
         });

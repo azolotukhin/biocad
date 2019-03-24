@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block body %}
+    {{ block.super }}
+    <div class="container">
+         <h3>Order № {{ order.id }}</h3>
+         <table class="table">
+             <tr>
+                 <td>
+                     Product
+                 </td>
+                 <td>
+                     {{ order.product }}
+                 </td>
+             </tr>
+             <tr>
+                 <td>
+                     Amount
+                 </td>
+                 <td>
+                     {{ order.amount }}
+                 </td>
+             </tr>
+             <tr>
+                 <td>
+                     Deadline
+                 </td>
+                 <td>
+                     {{ order.deadline |date:"d.m.Y G:i:00" }}
+                 </td>
+             </tr>
+             {% if order_stat.is_placed %}
+                 <tr>
+                     <td>
+                         Equipment
+                     </td>
+                     <td>
+                         {{ order_stat.actions.0.eq_id }}
+                     </td>
+                 </tr>
+             {% endif %}
+
+                 <tr>
+                     <td>
+                         Production time
+                     </td>
+                     <td>
+                         {% if order_stat.is_placed %}
+                             {{ order_stat.actions.0.start |date:"d.m.Y G:i:00" }} -
+                             {{ order_stat.actions.0.end |date:"d.m.Y G:i:00" }}
+                         {% else %}
+                             Not in schedule
+                         {% endif %}
+                     </td>
+                 </tr>
+
+
+         </table>
+    </div>
+{% endblock %}

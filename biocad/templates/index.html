@@ -9,6 +9,8 @@
                                 "end": "{{ d.end|date:"n/j/Y G:i:00" }}",
                                 "task":"{{ equipment_id }}",
                                 "order_id": {{ d.order_id}} ,
+                                "real_start": "{{ d.real_start|date:"d.m.Y G:i:00"}}" ,
+                                "real_end": "{{ d.real_end|date:"d.m.Y G:i:00"}}" ,
                                 "amount":{{ d.amount}} });
                 {% endfor %}
             {% endfor %}
@@ -40,7 +42,9 @@
                 }).attr("data-toggle", function (d) {
                     return 'tooltip';
                 }).attr("title", function (d) {
-                    return d.order_id + " (amount: "+ d.amount +")";
+                    return d.order_id + " (amount: "+ d.amount +") "+ d.real_start + " - " + d.real_end;
+                }).attr("order_id", function (d) {
+                    return d.order_id;
                 })
                 .addDataset(new Plottable.Dataset(data));
 
@@ -50,10 +54,16 @@
             ]);
 
             chart.renderTo("svg#example");
+
             $('.order').tooltip({
                             'container': 'body',
                             'placement': 'bottom'
                        });
+            $('.order').on( "click", function() {
+                var order_id = $(this).attr('order_id');
+                window.location.href = "/order/"+order_id;
+            });
+
         });
     </script>
 

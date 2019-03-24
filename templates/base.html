@@ -26,12 +26,12 @@
 	<body>
 		{% block body %}
             <nav class="navbar navbar-light bg-light" style="margin-bottom: 25px">
-              <a class="navbar-brand" href="#">
+              <a class="navbar-brand" href="/">
                 <img src="{% static "images/logo.png"%}" width="150" height="55" alt="">
               </a>
-              <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              <form class="form-inline" id="search-form" method="get" action="/">
+                <input class="form-control mr-sm-2" id="search" type="search" placeholder="Order number" aria-label="Order number">
+                <button class="btn btn-outline-success my-2 my-sm-0"  type="submit">Search</button>
               </form>
             </nav>
 		{% endblock %}

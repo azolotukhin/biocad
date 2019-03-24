@@ -37,12 +37,18 @@ if __name__ == "__main__":
                      for prod_id, prod_row in products.to_dict(orient='index').items()}
     orders_dict = orders.to_dict(orient='index')
 
+    orders_dict[94237]['execution_restrictions'] = {'start': dt(2019, 3, 20, 15, 40, 0)}
     print("start calculating schedule..")
 
     for max_order_price in range(1000, 500, -50):
         schedule = get_schedule(equipment_dict, orders_dict, products_dict,
-                                max_order_price=max_order_price)
+                                verbose=False, max_order_price=max_order_price)
         n_successes = np.sum([order['is_placed']
                               for order in schedule['orders_stat'].values()])
         print(max_order_price, n_successes)
+    print(n_successes)
     print("end calculating schedule")
+    print("empty equipments:")
+    for eq_id, eq_actions in schedule['equipment_schedule'].items():
+        if not eq_actions:
+            print(eq_id)

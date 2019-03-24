@@ -4,7 +4,7 @@ import datetime
 from django.shortcuts import render, get_object_or_404
 
 from algo import get_schedule
-from biocad.models import Equipment, Order, Product
+from biocad.models import Equipment, Order, Product, EquipmentClass
 
 
 def index(request):
@@ -15,6 +15,19 @@ def index(request):
             filter_date = datetime.datetime.strptime(filter_date_str, '%d.%m.%Y').date()
         except:
             pass
+
+    equipment_class_id = request.GET.get('equipment_class', '')
+    current_equipments_ids = []
+    if equipment_class_id:
+        try:
+            equipment_class = EquipmentClass.objects.get(pk=int(equipment_class_id))
+        except:
+            equipment_class_id = ''
+        else:
+            current_equipments = Equipment.objects.filter(equipment_class=equipment_class)
+            current_equipments_ids = [e.id for e in current_equipments]
+
+    equipment_classes = EquipmentClass.objects.all()
     equipments = Equipment.objects.all()
     orders = Order.objects.all()
     products = Product.objects.all()
@@ -32,6 +45,9 @@ def index(request):
     schedule = get_schedule(equipment_dict, orders_dict, products_dict)
     shedule_for_date = {}
     for equipment_id, data in schedule['equipment_schedule'].items():
+        if current_equipments_ids and equipment_id not in current_equipments_ids:
+            continue
+
         shedule_for_date[equipment_id] = []
         for d in data:
             if d['start'].date() == filter_date:
@@ -47,7 +63,10 @@ def index(request):
                 shedule_for_date[equipment_id].append(d)
         # shedule_for_date[equipment_id] = [d for d in data if d['start'].date() == datetime.datetime.utcnow().date()]
     return render(request, 'index.html', {'schedule': shedule_for_date,
-                                          'filter_date': filter_date})
+                                          'filter_date': filter_date,
+                                          'size': max(200, len(shedule_for_date) * 20),
+                                          'equipment_class_id': equipment_class_id,
+                                          'equipment_classes': equipment_classes})
 
 
 def order_detail(request, order_id):

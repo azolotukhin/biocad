@@ -71,6 +71,14 @@
     <div style="padding: 0 33px 30px;">
          <form>
           <div class="form-row align-items-center">
+             <div class="col-auto">
+              <select class="custom-select" name="equipment_class">
+                  <option {% if not equipment_class_id %}selected{% endif %}>Equipment class</option>
+                  {% for equipment_class in equipment_classes %}
+                      <option value="{{ equipment_class.id }}" {% if equipment_class.id|floatformat:"0" == equipment_class_id|floatformat:"0" %}selected{% endif %}>{{ equipment_class.name }}</option>
+                  {% endfor %}
+                </select>
+            </div>
             <div class="col-auto">
               <input id="datepicker" width="190" name="date" value="{{ filter_date|date:"d.m.Y" }}"/>
             </div>
@@ -82,7 +90,7 @@
     </div>
 
 
-    <div style="height: 10000px">
+    <div style="height: {{ size }}px">
         <svg id="example"></svg>
     </div>
 {% endblock %}

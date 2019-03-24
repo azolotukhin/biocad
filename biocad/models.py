@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 import uuid
+import redis
 
 from django.db import models
+from django.db.models.signals import post_save, post_delete, m2m_changed
+from django.dispatch import receiver
+
+
+cache = redis.Redis(host='localhost', port=6379, db=0)
 
 
 class EquipmentClass(models.Model):
@@ -58,3 +64,8 @@ class Order(models.Model):
 
     def __str__(self):
         return '%s (%s)' % (self.id, self.deadline.strftime('%Y-%m-%d'))
+
+
+@receiver([post_save, post_delete, m2m_changed])
+def clear_cache_signal(sender, **kwargs):
+    cache.delete('schedule_cache')

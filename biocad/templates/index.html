@@ -9,6 +9,8 @@
                                 "end": "{{ d.end|date:"n/j/Y G:i:00" }}",
                                 "task":"{{ equipment_id }}",
                                 "order_id": {{ d.order_id}} ,
+                                "real_start": "{{ d.real_start|date:"d.m.Y G:i:00"}}" ,
+                                "real_end": "{{ d.real_end|date:"d.m.Y G:i:00"}}" ,
                                 "amount":{{ d.amount}} });
                 {% endfor %}
             {% endfor %}
@@ -40,7 +42,9 @@
                 }).attr("data-toggle", function (d) {
                     return 'tooltip';
                 }).attr("title", function (d) {
-                    return d.order_id + "(amount: "+ d.amount +")";
+                    return d.order_id + " (amount: "+ d.amount +") "+ d.real_start + " - " + d.real_end;
+                }).attr("order_id", function (d) {
+                    return d.order_id;
                 })
                 .addDataset(new Plottable.Dataset(data));
 
@@ -50,15 +54,43 @@
             ]);
 
             chart.renderTo("svg#example");
+
             $('.order').tooltip({
                             'container': 'body',
                             'placement': 'bottom'
                        });
+            $('.order').on( "click", function() {
+                var order_id = $(this).attr('order_id');
+                window.location.href = "/order/"+order_id;
+            });
+
         });
     </script>
 
     {{ block.super }}
-    <div style="height: 10000px">
+    <div style="padding: 0 33px 30px;">
+         <form>
+          <div class="form-row align-items-center">
+             <div class="col-auto">
+              <select class="custom-select" name="equipment_class">
+                  <option value="" {% if not equipment_class_id %}selected{% endif %}>Equipment class</option>
+                  {% for equipment_class in equipment_classes %}
+                      <option value="{{ equipment_class.id }}" {% if equipment_class.id|floatformat:"0" == equipment_class_id|floatformat:"0" %}selected{% endif %}>{{ equipment_class.name }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+              <input id="datepicker" width="190" name="date" value="{{ filter_date|date:"d.m.Y" }}"/>
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary mb-2" style="margin: 0 !important;">Show</button>
+            </div>
+          </div>
+        </form>
+    </div>
+
+
+    <div style="height: {{ size }}px">
         <svg id="example"></svg>
     </div>
 {% endblock %}
